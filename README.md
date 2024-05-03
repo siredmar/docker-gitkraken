@@ -21,3 +21,12 @@ Run gitkraken by providing it a directory containing some repos you want to open
 $ gitkraken /home/user/myrepos
 ```
 
+## Config
+
+To skip the registration process you can increase the registration date. After the first startup, there will be a `~/.gitkraken/config` file.
+
+Run this jq command to "hack" the registration date: 
+
+```
+$ jq '.registration.date = "2099-01-01T00:00:00.000Z"' ~/.gitkraken/config > /tmp/gitkrakenconfig && mv /tmp/gitkrakenconfig ~/.gitkraken/config
+```
