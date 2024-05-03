@@ -1,5 +1,8 @@
 #!/bin/bash
 
+
+echo "127.0.0.1 release.gitkraken.com" >> /etc/hosts
+
 uid=${UID:-1000}
 gid=${GID:-1000}
 
