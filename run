@@ -1,5 +1,5 @@
 #!/bin/bash
-
+DIR=$1
 mkdir -p $HOME/.gitkraken/
 
 if [ ! -f $HOME/.gitconfig ]; then
@@ -8,10 +8,12 @@ fi
 
 docker run --name gitkraken -ti --rm \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
+  -v /dev:/dev \
   -e DISPLAY=$DISPLAY \
-  -v $(pwd):/home/developer/data/ \
-  -v $HOME/.gitkraken/:/home/developer/.gitkraken/ \
-  -v $HOME/.gitconfig:/home/developer/.gitconfig \
+  -v $DIR/:/home/user/dev \
+  -v $HOME/.gitkraken/:/home/user/.gitkraken/ \
+  -v $HOME/.gitconfig:/home/user/.gitconfig \
   -e UID=`id -u` -e GID=`id -g` \
-  -v ~/.ssh/:/home/developer/.ssh/ \
-  myparkfolio/gitkraken
+  -v ~/.ssh/:/home/user/.ssh/ \
+  --privileged \
+  siredmar/gitkraken:latest

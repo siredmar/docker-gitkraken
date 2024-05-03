@@ -3,16 +3,13 @@
 uid=${UID:-1000}
 gid=${GID:-1000}
 
-id -u developer > /dev/null 2>&1
-if [ $? -eq 1 ]; then
-    mkdir -p /home/developer
-    mkdir -p /home/developer/data
-    echo "developer:x:${uid}:${gid}:Developer,,,:/home/developer:/bin/bash" >> /etc/passwd
-    echo "developer:x:${gid}:" >> /etc/group
-    echo "developer ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/developer
-    chmod 0440 /etc/sudoers.d/developer
-    chown ${uid}:${gid} -R /home/developer
+# Create a user based on the UID and GID passed as environment variables
+if [ -n "$UID" ] && [ -n "$GID" ]; then
+    groupadd -g $uid usergroup
+    useradd -u $uid -g $gid -ms /bin/bash user
+    export HOME=/home/user
+    chown -R $uid:$gid /home/user
+    exec gosu user "$@"
+else
+    exec "$@"
 fi
-
-su developer -c "$@"
-
